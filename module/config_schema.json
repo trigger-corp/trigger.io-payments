@@ -1,0 +1,11 @@
+{
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"androidPublicKey": {
+			"required": true,
+			"type": "string",
+			"description": "Google Play public key"
+		}
+	}
+}

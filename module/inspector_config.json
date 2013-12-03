@@ -1,0 +1,10 @@
+{
+	"modules": {
+		"payments": {
+			"version": "2.0",
+			"config": {
+				"androidPublicKey": "XXXX"
+			}
+		}
+	}
+}

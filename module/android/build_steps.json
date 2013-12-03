@@ -1,0 +1,28 @@
+[
+	{
+		"do": {
+			"android_add_service": {
+				"service_name": "io.trigger.forge.android.modules.payments.PaymentsService"
+			}
+		}
+	},
+	{
+		"do": {
+			"android_add_receiver": {
+				"receiver_name": "io.trigger.forge.android.modules.payments.PaymentsReceiver",
+				"intent_filters": [
+					{"action": "com.android.vending.billing.IN_APP_NOTIFY"},
+					{"action": "com.android.vending.billing.RESPONSE_CODE"},
+					{"action": "com.android.vending.billing.PURCHASE_STATE_CHANGED"}
+				]
+			}
+		}
+	},
+	{
+		"do": {
+			"android_add_permission": {
+				"permission": "com.android.vending.BILLING"
+			}
+		}
+	}
+]
