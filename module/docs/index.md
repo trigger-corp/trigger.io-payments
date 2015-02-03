@@ -15,7 +15,7 @@ Android Public Key
 
 !method: forge.payments.transactionReceived.addListener(callback)
 !param: callback `function(data, confirm)` called when transaction is received with two arguments described below
-!description: Triggered for all payment transaction events, if the payments module is used this listener must be add on all pages to handle transaction events.
+!description: Triggered for all payment transaction events, if the payments module is used this listener must be added on all pages to handle transaction events.
 !platforms: iOS, Android
 
 The callback for this event will be invoked with two arguments, the

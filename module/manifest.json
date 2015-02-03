@@ -1,8 +1,8 @@
 {
-    "changes": "* Support arm64 devices running iOS 8", 
-    "description": "In-app payments.\n\nThe payments module allows access to iOS Appstore and Google Play in-app payments on devices.", 
-    "min_platform_version": "v2.1.0", 
-    "namespace": "payments", 
-    "platform_version": "v2.2.0", 
-    "version": "2.1"
+	"changes": "* Support arm64 devices running iOS 8",
+	"description": "In-app payments.\n\nThe payments module allows access to iOS Appstore and Google Play in-app payments on devices.",
+	"min_platform_version": "v2.2.7",
+	"namespace": "payments",
+	"platform_version": "v2.2.7",
+	"version": "2.2"
 }

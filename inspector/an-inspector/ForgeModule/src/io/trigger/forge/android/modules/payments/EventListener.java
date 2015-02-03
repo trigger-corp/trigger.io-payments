@@ -2,26 +2,28 @@ package io.trigger.forge.android.modules.payments;
 
 import io.trigger.forge.android.core.ForgeApp;
 import io.trigger.forge.android.core.ForgeEventListener;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 
-public class EventListener extends ForgeEventListener implements ServiceConnection {
+public class EventListener extends ForgeEventListener { //implements ServiceConnection {
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Intent service = new Intent();
-		service.setClass(ForgeApp.getActivity(), PaymentsService.class);
-		ForgeApp.getActivity().bindService(service, this, Context.BIND_AUTO_CREATE);
+		String androidPublicKey = ForgeApp.configForModule("payments").get("androidPublicKey").getAsString();
+		API.delegate = new InAppBillingDelegate(ForgeApp.getActivity(), androidPublicKey);
 	}
-
-	public void onServiceConnected(ComponentName name, IBinder service) {
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (!API.delegate.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+		}
 	}
-
-	public void onServiceDisconnected(ComponentName name) {
+	
+	@Override
+	public void onDestroy() {
+		API.delegate.release();
 	}
-
+	
 }
