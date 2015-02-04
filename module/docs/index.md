@@ -33,7 +33,6 @@ confirming transactions.
 -  ``receipt``: Receipt information which can be sent to a server
 and verified with iTunes or Google Play. See the guide for more
 details.
--  ``alreadyOwned``: (Android only) set to true if `purchaseProduct` is called on an item that has already been purchased but not consumed. (See `forge.payments.consumePurchase` below for more information)
 
 The 2nd argument is a function used to confirm the transaction has been
 processed, this is required by both iOS and Android to confirm the

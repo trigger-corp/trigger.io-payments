@@ -154,11 +154,7 @@ public class InAppBillingDelegate {
 			break;
 		case RESULT_ITEM_ALREADY_OWNED:
 			ForgeLog.w("Already own: " + type + "." + product);
-			HashMap<String, JsonObject> restoredTransactions = fetchTransactions();
-			JsonObject transaction = restoredTransactions.get(product);
-			transaction.addProperty("alreadyOwned", true);
-			task.success();
-			ForgeApp.event("payments.transactionReceived", transaction);
+			task.error("Item already owned", "EXPECTED_FAILURE", null);
 			break;
 		default:
 			task.error("Error creating purchase intent: " + Consts.ResponseCode.valueOf(bundle.getInt("RESPONSE_CODE")).toString(), "EXPECTED_FAILURE", null);
