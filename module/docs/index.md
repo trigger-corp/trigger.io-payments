@@ -33,6 +33,7 @@ confirming transactions.
 -  ``receipt``: Receipt information which can be sent to a server
 and verified with iTunes or Google Play. See the guide for more
 details.
+-  ``alreadyOwned``: (Android only) set to true if `purchaseProduct` is called on an item that has already been purchased but not consumed. (See `forge.payments.consumePurchase` below for more information)
 
 The 2nd argument is a function used to confirm the transaction has been
 processed, this is required by both iOS and Android to confirm the
@@ -69,3 +70,13 @@ transaction has been both received and correctly processed.
 !description: If in-app products are managed by iTunes or Google Play, previous transactions may be requested at any time. This allows transactions to be restored on a new device or if the app has been reinstalled. The ``success`` callback will be called once the request is made; after this the transaction information will be returned via the ``transactionReceived`` listener.
 !platforms: iOS, Android
 !param: error `function(content)` called with details of any error which may occur
+
+!method: forge.payments.consumePurchase(productId, success, error)
+!param: productId `string` product id registered with iTunes or Google Play
+!param: success `function()` purchase consumed
+!description: Consumes an in-app product identified by ``productId``. The ``success`` callback will be called when the purchase has been successfully consumed.
+!platforms: Android
+!param: error `function(content)` called with details of any error which may occur
+
+> ::Note:: As of Version 3 of the Google In-app Billing API, all in-app products are managed. This means that the user's ownership of all in-app item purchases is maintained by Google Play, and your application can query the user's purchase information when needed. When the user successfully purchases an in-app product, that purchase is recorded in Google Play. Once an in-app product is purchased, it is considered to be "owned". In-app products in the "owned" state cannot be purchased from Google Play. You must send a consumption request for the "owned" in-app product before Google Play makes it available for purchase again. Consuming the in-app product reverts it to the "unowned" state, and discards the previous purchase data.
+

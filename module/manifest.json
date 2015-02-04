@@ -1,8 +1,8 @@
 {
-	"changes": "* Update Android In App Billing service to version 3",
+	"changes": "* Update Android In App Billing service to version 3\n* New method for Android: `consumePurchase`",
 	"description": "In-app payments.\n\nThe payments module allows access to iOS Appstore and Google Play in-app payments on devices.",
 	"min_platform_version": "v2.2.7",
 	"namespace": "payments",
 	"platform_version": "v2.2.7",
-	"version": "2.1.1"
+	"version": "2.1.2"
 }

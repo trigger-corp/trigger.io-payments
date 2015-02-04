@@ -87,7 +87,6 @@ public class InAppBillingDelegate {
 			task.error("Product is not owned");
 			return;
 		}
-		ForgeLog.i("Trying to consume: " + transaction);
 		try {
 			String purchaseToken = transaction.getAsJsonObject("receipt").get("purchaseToken").getAsString();
 			ForgeLog.i("Consuming Purchase token: " + purchaseToken);
@@ -127,7 +126,6 @@ public class InAppBillingDelegate {
 		}
 
 		String payload = type + ":" + task.callid;
-		ForgeLog.i("Created request with payload: " + payload);
 		String packageName = getContext().getApplicationContext().getPackageName();
 		Bundle bundle;		
 		try {
@@ -158,6 +156,7 @@ public class InAppBillingDelegate {
 			ForgeLog.w("Already own: " + type + "." + product);
 			HashMap<String, JsonObject> restoredTransactions = fetchTransactions();
 			JsonObject transaction = restoredTransactions.get(product);
+			transaction.addProperty("alreadyOwned", true);
 			task.success();
 			ForgeApp.event("payments.transactionReceived", transaction);
 			break;
@@ -177,17 +176,13 @@ public class InAppBillingDelegate {
 	 */
 	public boolean handleActivityResult(int requestCode, int resultCode, Intent intent) {
 		if (requestCode != PURCHASE_FLOW_REQUEST_CODE) {
-			ForgeLog.d(String.format("Forwarding activity result with requestCode: %d", requestCode));
 			return false;
 		}
 		
 		Consts.ResponseCode responseCode = Consts.ResponseCode.valueOf(intent.getIntExtra("RESPONSE_CODE", 
-				Consts.ResponseCode.RESULT_ERROR.value()));
-				
-		ForgeLog.d(String.format("resultCode = %d, responseCode = %s", resultCode, responseCode.toString()));
-		ForgeLog.d("Intent: " + intent.getExtras());
-		
+				Consts.ResponseCode.RESULT_ERROR.value()));		
 		if (responseCode != Consts.ResponseCode.RESULT_OK) {
+			// no way to get a handle to the original tasks :-/
 			for (ForgeTask task : pendingTasks.values()) {
 				ForgeLog.w("Async error completing MarketBilling task: " + responseCode.toString());
 				task.error("Async error completing MarketBilling task: " + responseCode.toString(), "EXPECTED_FAILURE", null);
@@ -199,9 +194,18 @@ public class InAppBillingDelegate {
 		// parse intent
 		String signature = intent.getStringExtra("INAPP_DATA_SIGNATURE");
 		String json = intent.getStringExtra("INAPP_PURCHASE_DATA");
+		if (json == null) {
+			// probably a refund or canceled task, no way to know with v3 API :-/
+			// no way to get a handle to the original tasks with v3 either :-/
+			for (ForgeTask task : pendingTasks.values()) {
+				ForgeLog.w("Processed transaction with no body, probably a refund or cancelation: " + resultCode);
+				task.success();
+			}
+			pendingTasks.clear();
+			return true;
+		}
 		JsonObject transaction = parseTransaction(signature, json);
 		String payload = transaction.get("developerPayload").getAsString();
-		ForgeLog.i("Processing result for DEVELOPER_PAYLOAD: " + payload);
 		if (!pendingTasks.containsKey(payload)) {
 			ForgeLog.w("No pending tasks found for: " + payload);
 		} else {
@@ -216,7 +220,6 @@ public class InAppBillingDelegate {
 	}
 	
 	private JsonObject parseTransaction(final String signature, final String json) {		
-		ForgeLog.i("parsing intent for signature: " + signature + " and purchaseData: " + json);
 		JsonObject order = (JsonObject) new JsonParser().parse(json);
 
 		// receipt

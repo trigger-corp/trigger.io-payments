@@ -8,6 +8,14 @@ forge['payments'] = {
 	'restoreTransactions': function (success, error) {
 		forge.internal.call("payments.restoreTransactions", {}, success, error);
 	},
+	'consumePurchase': function (product, success, error) {
+		if (forge.is.android()) {
+			forge.internal.call("payments.consumePurchase", {product: product}, success, error);
+		} else {
+			forge.logging.warning("forge.payments.consumePurchase is only available for Android");
+			success();
+		}
+	},	
 	'transactionReceived': {
 		addListener: function (callback, error) {
 			forge.internal.addEventListener('payments.transactionReceived', function (data) {
