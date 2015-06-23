@@ -3,7 +3,11 @@ forge['payments'] = {
 		forge.internal.call("payments.purchaseProduct", {product: product}, success, error);
 	},
 	'startSubscription': function (product, success, error) {
-		forge.internal.call("payments.startSubscription", {product: product}, success, error);
+		if (forge.is.ios()) {
+			forge.internal.call("payments.purchaseProduct", {product: product, type: 'subs'}, success, error);
+		} else {
+			forge.internal.call("payments.startSubscription", {product: product}, success, error);
+		}
 	},
 	'restoreTransactions': function (success, error) {
 		forge.internal.call("payments.restoreTransactions", {}, success, error);
