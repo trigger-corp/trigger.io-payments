@@ -9,10 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
-@interface payments_transactionObserver : NSObject <SKPaymentTransactionObserver> {
+
+
+@interface payments_transactionObserver : NSObject <SKProductsRequestDelegate, SKPaymentTransactionObserver> {
 	payments_transactionObserver *me;
+    SKProductsRequest *productsRequest;
 }
 
 - (payments_transactionObserver *) init;
+- (void) requestProductData:(NSSet*)productIdentifiers;
 
 @end

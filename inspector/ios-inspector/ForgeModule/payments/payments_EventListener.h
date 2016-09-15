@@ -6,6 +6,10 @@
 //  Copyright (c) 2012 Trigger Corp. All rights reserved.
 //
 
+#import "payments_transactionObserver.h"
+
+extern payments_transactionObserver *observer;
+
 @interface payments_EventListener : ForgeEventListener
 
 @end

@@ -40,15 +40,15 @@ transaction has been both received and correctly processed.
 
 **Example**:
 
-    forge.payments.transactionReceived.addListener(function (data, confirm) {
-      if (data.purchaseState == "PURCHASED") {
-          alert("Thanks for buying: "+data.productId);
-          confirm();
-      } else {
-          alert("Your product '"+productId+"' has been removed");
-          confirm();
-      }
-    });
+	forge.payments.transactionReceived.addListener(function (data, confirm) {
+	  if (data.purchaseState == "PURCHASED") {
+		  alert("Thanks for buying: "+data.productId);
+		  confirm();
+	  } else {
+		  alert("Your product '"+productId+"' has been removed");
+		  confirm();
+	  }
+	});
 
 !method: forge.payments.purchaseProduct(productId, success, error)
 !param: productId `string` product id registered with iTunes or Google Play
@@ -79,3 +79,8 @@ transaction has been both received and correctly processed.
 
 > ::Note:: As of Version 3 of the Google In-app Billing API, all in-app products are managed. This means that the user's ownership of all in-app item purchases is maintained by Google Play, and your application can query the user's purchase information when needed. When the user successfully purchases an in-app product, that purchase is recorded in Google Play. Once an in-app product is purchased, it is considered to be "owned". In-app products in the "owned" state cannot be purchased from Google Play. You must send a consumption request for the "owned" in-app product before Google Play makes it available for purchase again. Consuming the in-app product reverts it to the "unowned" state, and discards the previous purchase data.
 
+!method: forge.payments.manageSubscriptions(success, error)
+!param: success `function()`
+!param: error `function(content)` called with details of any error which may occur
+!description: Opens the iTunes Subscription management screen to allow your user to manage their subscription.
+!platforms: iOS
